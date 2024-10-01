@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .card {
+            border-radius: 8px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-text {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            -webkit-line-clamp: 3;
+            max-height: 4.5em;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #343a40;
+            color: white;
+            margin-top: auto;
+        }
+
+        .pagination .active .page-link {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .cart-button {
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            right: 100%;
+            transform: translateX(-50%);
+        }
+
+        .dropdown-menu-center {
+            right: 100%;
+            transform: translateX(-50%);
+        }
+        .review {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .review:hover {
+            background-color: #e2e6ea;
+        }
+
+        .review-rating strong,
+        .review-comment strong,
+        .review-user strong {
+            color: #343a40;
+        }
+
+        .review-rating p,
+        .review-comment p,
+        .review-user p {
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand">Market King</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products/contact">Contact</a></li>
+        </ul>
+    </div>
+    <div class="dropdown" style="margin-right: 2%;">
+        <button class="btn btn-secondary dropdown-toggle" type="button"
+                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span th:text="${user != null ? 'More' : 'Login'}"></span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-center" aria-labelledby="dropdownMenuButton">
+            <div th:if="${user != null}">
+                <a class="dropdown-item" th:href="@{/user/info}">User Information</a>
+                <a class="dropdown-item" th:href="@{/order-history}">Order history</a>
+                <a class="dropdown-item" th:href="@{/wishlist}">Wishes</a>
+                <form action="/logout" method="post" style="display:inline;">
+                    <button type="submit" class="dropdown-item">Logout</button>
+                </form>
+            </div>
+            <div th:if="${user == null}">
+                <a class="dropdown-item" href="/login">Login</a>
+                <a class="dropdown-item" href="/register/user">Sign up</a>
+            </div>
+        </div>
+    </div>
+    <form action="/cart" method="get" style="display: inline;">
+        <button class="cart-button" type="submit">
+            <img src="/images/cart.jpg" alt="Cart" style="width: 40px; height: 40px; border-radius: 50%;">
+        </button>
+    </form>
+</nav>
+<div class="container my-4">
+    <h1 th:text="${product.title}"></h1>
+    <img th:src="${product.thumbnail}" class="img-fluid" alt="Product Image">
+    <p th:text="${product.description}"></p>
+    <p class="price"><strong>Price:</strong> $<span th:text="${product.price}"></span></p>
+    <p><strong>Brand:</strong> <span th:text="${product.brand}"></span></p>
+    <h4>Add to Cart</h4>
+    <form th:action="@{/cart/addFromDetailPage}" method="post">
+        <div class="input-group mb-3" style="max-width: 300px;">
+            <input type="hidden" name="id" th:value="${product.id}" />
+            <input type="number" name="quantity" class="form-control" placeholder="Quantity" min="1" value="1" required>
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-success">
+                    <img src="/images/cart.jpg" alt="Cart" style="width: 20px; height: 20px; vertical-align: middle;">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </form>
+    <h4>Dimensions</h4>
+    <p th:if="${product.dimensions != null}">
+        <strong>Width:</strong> <span th:text="${product.dimensions.width}"></span> cm<br>
+        <strong>Height:</strong> <span th:text="${product.dimensions.height}"></span> cm<br>
+        <strong>Depth:</strong> <span th:text="${product.dimensions.depth}"></span> cm
+    </p>
+    <p th:if="${product.dimensions == null}">No dimensions available.</p>
+    <h4>Add to Wishlist</h4>
+    <div th:if="${user != null}">
+        <form th:action="@{/wishlist/add}" method="post">
+            <input type="hidden" name="productId" th:value="${product.id}" />
+            <button type="submit" class="btn btn-warning">Add to Wishlist</button>
+        </form>
+    </div>
+    <div th:if="${user == null}">
+        <p>You need to <a th:href="@{/login}">login</a> to add items to your wishlist.</p>
+    </div>
+    <h4>Customer Reviews</h4>
+    <div th:each="review : ${product.reviews}" class="review mb-4 p-3 border rounded bg-light">
+        <div class="review-rating">
+            <p class="mb-1"><strong>Rating:</strong> <span th:text="${review.rating}"></span>/5</p>
+        </div>
+        <div class="review-comment">
+            <p class="mb-1"><strong>Comment:</strong> <span th:text="${review.comment}"></span></p>
+        </div>
+        <div class="review-user">
+            <p class="mb-0"><strong>User:</strong> <span th:text="${review.reviewerName}"></span></p>
+        </div>
+    </div>
+    <h4>Submit a Review</h4>
+    <div th:if="${user != null}">
+        <form th:action="@{/products/{id}/reviews(id=${product.id})}" method="post">
+            <div class="form-group">
+                <label for="rating">Rating:</label>
+                <input type="number" id="rating" name="rating" min="1" max="5" required class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea id="comment" name="comment" required class="form-control"></textarea>
+            </div>
+            <input type="hidden" name="username" th:value="${user.username}" />
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+    </div>
+    <div th:if="${user == null}">
+        <p>You need to <a th:href="@{/login}">login</a> to submit a review.</p>
+    </div>
+    <h4>Meta Information</h4>
+    <div class="meta-info">
+        <p>
+            <strong>Created At:</strong> <span th:text="${product.meta.createdAt}"></span><br>
+            <strong>Updated At:</strong> <span th:text="${product.meta.updatedAt}"></span><br>
+            <strong>Barcode:</strong> <span th:text="${product.meta.barcode}"></span><br>
+            <strong>QR Code:</strong> <img th:src="${product.meta.qrCode}" alt="QR Code" style="width:100px;">
+        </p>
+    </div>
+    <a th:href="@{/products(page=${currentPage}, search=${search})}" class="btn btn-secondary">Back to Products</a>
+</div>
+<div class="footer">
+    <p>&copy; 2024 Market King. All Rights Reserved.</p>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
