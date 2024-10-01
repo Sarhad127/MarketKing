@@ -1,0 +1,52 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "master" ]
+
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  build-number: ${GITHUB_RUN_NUMBER}
+
+permissions: write-all
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 20
+        uses: actions/setup-java@v4
+        with:
+          java-version: '20'
+          distribution: 'corretto'
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: '8.10'
+
+      - name: Build
+        run: gradle build
+
+      - name: Test
+        run: gradle test
+
+      - run: mv build/libs/MarketKing-0.0.1-SNAPSHOT.jar build/libs/MarketKing-1.${{ env.build-number }}.jar
+      - run: mkdir -p staging && cp build/libs/MarketKing-1.${{ env.build-number }}.jar staging/
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "Version"
+          files: |
+            staging/*.jar
+
+
