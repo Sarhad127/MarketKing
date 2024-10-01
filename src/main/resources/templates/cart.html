@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #343a40;
+            color: white;
+            margin-top: auto;
+        }
+        .container {
+            flex: 1;
+        }
+        .cart-button {
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+        .dropdown-menu {
+            right: 100%;
+            transform: translateX(-50%);
+        }
+
+        .dropdown-menu-center {
+            right: 100%;
+            transform: translateX(-50%);
+        }
+        .product-link {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s, text-decoration 0.3s;
+        }
+
+        .product-link:hover {
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand">Market King</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="/products">Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products/about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="/products/contact">Contact</a></li>
+        </ul>
+    </div>
+    <div class="dropdown" style="margin-right: 2%;">
+        <button class="btn btn-secondary dropdown-toggle" type="button"
+                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span th:text="${user != null ? 'More' : 'Login'}"></span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-center" aria-labelledby="dropdownMenuButton">
+            <div th:if="${user != null}">
+                <a class="dropdown-item" th:href="@{/user/info}">User Information</a>
+                <a class="dropdown-item" th:href="@{/order-history}">Order history</a>
+                <a class="dropdown-item" th:href="@{/wishlist}">Wishes</a>
+                <form action="/logout" method="post" style="display:inline;">
+                    <button type="submit" class="dropdown-item">Logout</button>
+                </form>
+            </div>
+            <div th:if="${user == null}">
+                <a class="dropdown-item" href="/login">Login</a>
+                <a class="dropdown-item" href="/register/user">Sign up</a>
+            </div>
+        </div>
+    </div>
+    <form action="/cart" method="get" style="display: inline;">
+        <button class="cart-button" type="submit">
+            <img src="/images/cart.jpg" alt="Cart" style="width: 40px; height: 40px; border-radius: 50%;">
+        </button>
+    </form>
+</nav>
+<div class="container my-4">
+    <h2 class="text-center">Shopping Cart</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td>
+                <img th:src="${item.product.thumbnail}" style="width: 50px; height: 50px;" alt="Product Image">
+                <a th:href="@{/products/{id}(id=${item.product.id})}" th:text="${item.product.title}" class="product-link"></a>
+            </td>
+            <td th:text="'$' + ${item.product.price}"></td>
+            <td>
+                <span th:text="${item.quantity}"></span>
+                <form th:action="@{/cart/update}" method="post" style="display: inline;">
+                    <input type="hidden" name="id" th:value="${item.product.id}"/>
+                    <button type="submit" name="action" value="increase" class="btn btn-success btn-sm">+</button>
+                    <button type="submit" name="action" value="decrease" class="btn btn-danger btn-sm">-</button>
+                </form>
+            </td>
+            <td th:text="'$' + ${item.product.price * item.quantity}"></td>
+            <td>
+                <form th:action="@{/cart/remove(id=${item.product.id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <h3>Total: $<span th:text="${totalAmount}"></span></h3>
+        <a href="/checkout" class="btn btn-success">Proceed to Checkout</a>
+    </div>
+</div>
+<div class="footer">
+    <p>&copy; 2024 Market King. All Rights Reserved.</p>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
