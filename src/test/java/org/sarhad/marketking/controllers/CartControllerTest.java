@@ -1,4 +1,4 @@
-package org.sarhad.marketking;
+package org.sarhad.marketking.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.sarhad.marketking.controllers.CartController;
 import org.sarhad.marketking.service.CartService;
 import org.springframework.ui.Model;
 import java.util.Collections;
