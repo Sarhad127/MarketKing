@@ -3,7 +3,6 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "master" ]
-
   pull_request:
     branches: [ "master" ]
 
@@ -14,8 +13,22 @@ permissions: write-all
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: MyMarket
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: asdasd123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +43,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: '8.10'
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -U postgres; do
+            echo "Waiting for PostgreSQL..."
+            sleep 5
+          done
 
       - name: Build and Test
         run: gradle build --no-daemon
