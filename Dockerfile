@@ -1,6 +1,6 @@
 FROM gradle:jdk17
 
-COPY --from=build /home/gradle/project/build/libs/MarketKing-0.0.1-SNAPSHOT.jar /app.jar
+COPY ./ ./
 
 RUN mv ./build/libs/MarketKing-0.0.1-SNAPSHOT.jar /app.jar
 
