@@ -1,5 +1,5 @@
 # Steg 1: Bygg steg
-FROM gradle:jdk17 AS build
+FROM gradle:jdk17
 
 # Sätt arbetskatalog
 WORKDIR /home/gradle/project
