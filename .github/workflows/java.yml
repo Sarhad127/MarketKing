@@ -6,66 +6,27 @@ on:
   pull_request:
     branches: [ "master" ]
 
-env:
-  build-number: ${{ github.run_number }}
-
 permissions: write-all
 
 jobs:
   build:
-    runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: MyMarket
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: asdasd123
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+        name: Check out code
 
-      - name: Set up JDK 20
-        uses: actions/setup-java@v4
+      - uses: mr-smithers-excellent/docker-build-push@v6
+        name: Build & push Docker image
         with:
-          java-version: '20'
-          distribution: 'corretto'
+          image: Sarhad/test123
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_MYDOCKER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: '8.10'
-
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          until pg_isready -h localhost -U postgres; do
-            echo "Waiting for PostgreSQL..."
-            sleep 5
-          done
-
-      - name: Build and Test
-        run: gradle build --no-daemon
-
-      - name: Rename Jar with Build Number
-        run: mv build/libs/MarketKing-0.0.1-SNAPSHOT.jar build/libs/MarketKing-1.${{ env.build-number }}.jar
-
-      - name: Prepare Jar for Release
-        run: mkdir -p staging && cp build/libs/MarketKing-1.${{ env.build-number }}.jar staging/
-
-      - name: Create Release
-        uses: marvinpinto/action-automatic-releases@latest
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "v1.${{ env.build-number }}"
-          prerelease: false
-          title: "Release v1.${{ env.build-number }}"
-          files: |
-            staging/*.jar
+          #dockerhub konto
+          #Sarhad
+          #193724865
