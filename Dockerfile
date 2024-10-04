@@ -1,19 +1,16 @@
-FROM gradle:jdk17 AS builder
-
-WORKDIR /app
-
-COPY gradlew gradlew
-COPY gradle gradle/
-COPY build.gradle settings.gradle ./
+FROM gradle:jdk21 as builder
 
 COPY ./ ./
 
-RUN ./gradlew clean build --no-daemon
+RUN gradle build
 
-FROM eclipse-temurin:17-jdk-jammy
+RUN mv ./build/libs/MarketKing-0.0.1-SNAPSHOT.jar /app.jar
 
-COPY --from=builder /app/build/libs/MarketKing-0.0.1-SNAPSHOT.jar /app.jar
+
+FROM amazoncorretto:21-alpine
+
+COPY --from=builder /app.jar /app.jar
+
 
 EXPOSE 8080
-
 CMD ["java", "-jar", "/app.jar"]

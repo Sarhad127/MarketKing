@@ -19,7 +19,7 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build & push Docker image
         with:
-          image: bahrami127/test123
+          image: bahrami127/marketking
           tags: latest
           registry: docker.io
           dockerfile: Dockerfile
