@@ -1,6 +1,5 @@
 # Byggfasen (multi-stage build)
-FROM gradle:jdk17 as builder
-
+FROM gradle:jdk20 as builder
 # Sätt arbetskatalog i Docker
 WORKDIR /app
 
