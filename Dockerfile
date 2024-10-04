@@ -1,16 +1,18 @@
 # Stage 1: Build the application using Gradle
 FROM gradle:jdk17 AS builder
 
-# Set the working directory
+# Set the working directory inside the Docker container
 WORKDIR /app
 
-# Copy the Gradle wrapper files first to leverage Docker cache
-COPY gradlew gradlew
-COPY gradle gradle/
-COPY build.gradle settings.gradle ./
+# Copy only the necessary files for Gradle to cache dependencies first
+COPY gradle ./gradle
+COPY build.gradle settings.gradle gradlew ./
+
+# Download dependencies (this step helps in caching dependencies and speeds up future builds)
+RUN ./gradlew build --no-daemon --stacktrace || return 0
 
 # Copy the rest of the application files
-COPY ./ ./
+COPY . .
 
 # Build the application
 RUN ./gradlew clean build --no-daemon
