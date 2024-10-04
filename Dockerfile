@@ -1,25 +1,26 @@
-# Använd en Java 17-bild från Eclipse Temurin som bas
-FROM eclipse-temurin:17-jdk-jammy
+# Byggfasen (multi-stage build)
+FROM gradle:jdk17 as builder
 
-# Sätt arbetskatalogen till /app
+# Sätt arbetskatalog i Docker
 WORKDIR /app
 
-# Kopiera Gradle wrapper-filen först och ge den körningsrättigheter
-COPY gradlew .
-COPY gradle/ gradle/
-RUN chmod +x gradlew
-
-# Kopiera resten av applikationsfilerna
+# Kopiera projektfiler till containern
 COPY . .
 
-# Bygg applikationen med Gradle wrapper utan att använda daemon
-RUN ./gradlew build --no-daemon
+# Bygg applikationen med Gradle utan att använda daemon
+RUN gradle clean build --no-daemon
 
-# Flytta den byggda JAR-filen till /app.jar
-RUN mv ./build/libs/MarketKing-0.0.1-SNAPSHOT.jar /app.jar
+# Körfasen
+FROM amazoncorretto:17-alpine
 
-# Exponera port 8080 för att köra applikationen
+# Skapa en mapp för applikationen
+WORKDIR /app
+
+# Kopiera den genererade JAR-filen från byggfasen
+COPY --from=builder /app/build/libs/*.jar /app/app.jar
+
+# Exponera porten som Spring Boot använder (8080)
 EXPOSE 8080
 
-# Kör applikationen med Java
-CMD ["java", "-jar", "/app.jar"]
+# Ange det kommando som ska köras när containern startar
+CMD ["java", "-jar", "/app/app.jar"]
