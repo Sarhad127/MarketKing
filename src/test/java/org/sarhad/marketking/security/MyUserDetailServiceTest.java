@@ -9,12 +9,13 @@ import org.sarhad.marketking.model.Users;
 import org.sarhad.marketking.repository.UsersRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class MyUserDetailServiceTest {
 
     @Mock

@@ -10,6 +10,7 @@ import org.sarhad.marketking.repository.ProductRepository;
 import org.sarhad.marketking.repository.ReviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class ProductServiceImplTest {
 
     @Mock

@@ -7,12 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sarhad.marketking.service.CartService;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class CartControllerTest {
 
     @Mock

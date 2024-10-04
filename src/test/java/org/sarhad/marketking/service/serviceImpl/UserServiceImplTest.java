@@ -8,13 +8,14 @@ import org.mockito.MockitoAnnotations;
 import org.sarhad.marketking.model.Users;
 import org.sarhad.marketking.repository.UsersRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class UserServiceImplTest {
 
     @Mock

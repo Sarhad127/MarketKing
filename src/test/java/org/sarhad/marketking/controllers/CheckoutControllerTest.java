@@ -12,6 +12,7 @@ import org.sarhad.marketking.service.CartService;
 import org.sarhad.marketking.service.OrderService;
 import org.sarhad.marketking.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class CheckoutControllerTest {
 
     @Mock

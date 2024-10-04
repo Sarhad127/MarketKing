@@ -11,6 +11,7 @@ import org.sarhad.marketking.security.CustomUserDetails;
 import org.sarhad.marketking.service.UserService;
 import org.sarhad.marketking.security.PasswordEncoderConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 
 import java.util.Optional;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class UserControllerTest {
 
     @Mock

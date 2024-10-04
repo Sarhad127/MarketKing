@@ -10,6 +10,7 @@ import org.sarhad.marketking.model.*;
 import org.sarhad.marketking.repository.OrderRepository;
 import org.sarhad.marketking.service.ProductService;
 import org.sarhad.marketking.service.UserService;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class OrderServiceImplTest {
 
     @Mock

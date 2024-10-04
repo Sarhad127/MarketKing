@@ -10,6 +10,7 @@ import org.sarhad.marketking.model.CartItem;
 import org.sarhad.marketking.model.Product;
 import org.sarhad.marketking.repository.CartRepository;
 import org.sarhad.marketking.repository.ProductRepository;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class CartServiceImplTest {
 
     @Mock

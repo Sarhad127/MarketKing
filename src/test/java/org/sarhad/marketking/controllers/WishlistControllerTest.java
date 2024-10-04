@@ -11,13 +11,14 @@ import org.sarhad.marketking.model.Wishlist;
 import org.sarhad.marketking.security.CustomUserDetails;
 import org.sarhad.marketking.service.UserService;
 import org.sarhad.marketking.service.WishesService;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class WishlistControllerTest {
 
     @Mock

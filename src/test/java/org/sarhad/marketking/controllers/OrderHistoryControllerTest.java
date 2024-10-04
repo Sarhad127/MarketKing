@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import org.sarhad.marketking.model.Orders;
 import org.sarhad.marketking.security.CustomUserDetails;
 import org.sarhad.marketking.service.OrderService;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class OrderHistoryControllerTest {
 
     @Mock

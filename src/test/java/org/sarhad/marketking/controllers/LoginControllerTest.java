@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sarhad.marketking.model.Users;
 import org.sarhad.marketking.service.UserService;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
+@ActiveProfiles("test")
 class LoginControllerTest {
 
     @Mock
