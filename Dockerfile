@@ -4,11 +4,9 @@ FROM eclipse-temurin:17-jdk-jammy
 # Sätt arbetskatalogen till /app
 WORKDIR /app
 
-# Kopiera Gradle wrapper filer först för att utnyttja Docker-caching
+# Kopiera Gradle wrapper-filen först och ge den körningsrättigheter
 COPY gradlew .
 COPY gradle/ gradle/
-
-# Ge körningsrättigheter till Gradle wrappern
 RUN chmod +x gradlew
 
 # Kopiera resten av applikationsfilerna
