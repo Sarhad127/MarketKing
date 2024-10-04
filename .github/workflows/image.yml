@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Java CI with Gradle
 
 on:
   push:
@@ -6,24 +6,23 @@ on:
   pull_request:
     branches: [ "master" ]
 
+permissions: write-all
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        name: Check out code
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
+      - uses: mr-smithers-excellent/docker-build-push@v6
+        name: Build & push Docker image
         with:
+          image: sarhad/test123
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_MYDOCKER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build Docker image
-        run: |
-          docker build -t sarhad/test123 .
-
-      - name: Push Docker image
-        run: |
-          docker push sarhad/test123
