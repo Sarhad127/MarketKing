@@ -1,25 +1,23 @@
-# Byggfasen (multi-stage build)
-FROM gradle:jdk17
-# Sätt arbetskatalog i Docker
+# Stage 1: Build the application using Gradle
+FROM gradle:jdk17 AS builder
+
+# Set the working directory
 WORKDIR /app
 
-# Kopiera projektfiler till containern
-COPY . .
+# Copy the build files
+COPY ./ ./
 
-# Bygg applikationen med Gradle utan att använda daemon
+# Build the application
 RUN gradle clean build --no-daemon
 
-# Körfasen
-FROM amazoncorretto:17-alpine
+# Stage 2: Run the application using a lightweight image
+FROM eclipse-temurin:17-jdk-jammy
 
-# Skapa en mapp för applikationen
-WORKDIR /app
+# Copy the built jar file from the builder stage
+COPY --from=builder /app/build/libs/MarketKing-0.0.1-SNAPSHOT.jar /app.jar
 
-# Kopiera den genererade JAR-filen från byggfasen
-COPY --from=builder /app/build/libs/*.jar /app/app.jar
-
-# Exponera porten som Spring Boot använder (8080)
+# Expose port 8080
 EXPOSE 8080
 
-# Ange det kommando som ska köras när containern startar
-CMD ["java", "-jar", "/app/app.jar"]
+# Command to run the application
+CMD ["java", "-jar", "/app.jar"]
