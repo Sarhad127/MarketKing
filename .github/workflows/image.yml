@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Build and Push Docker Image
 
 on:
   push:
@@ -10,18 +10,23 @@ permissions: write-all
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code
       - uses: actions/checkout@v3
 
-      - uses: mr-smithers-excellent/docker-build-push@v6
-        name: Build & push Docker image
+      # Step 2: Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          image: bahrami127/marketking
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_MYDOCKER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Step 3: Build the Docker image
+      - name: Build Docker image
+        run: docker build -t bahrami127/marketking:latest .
+
+      # Step 4: Push the Docker image to Docker Hub
+      - name: Push Docker image
+        run: docker push bahrami127/marketking:latest
