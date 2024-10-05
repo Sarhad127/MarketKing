@@ -29,4 +29,11 @@ jobs:
         with:
           image: bahrami127/marketking  # Image name on Docker Hub
           tags: v1, latest  # Tags for the image
+          registry: docker.io  # Specify the Docker registry (Docker Hub)
           dockerfile: Dockerfile.ci  # Path to the Dockerfile
+          addLatest: false
+          addTimestamp: false
+          enableBuildKit: false
+          multiPlatform: false
+          overrideDriver: false
+          pushImage: true
