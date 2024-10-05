@@ -7,7 +7,7 @@ COPY build.gradle settings.gradle gradlew ./
 
 RUN chmod +x gradlew
 
-RUN ./gradlew clean build --no-daemon --info --stacktrace
+RUN ./gradlew build --no-daemon || return 0
 
 COPY . .
 
