@@ -23,6 +23,11 @@ repositories {
     mavenCentral()
 }
 
+springBoot {
+    mainClass = 'org.sarhad.marketking.MarketKingApplication'  // Correct package and class
+}
+
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'

@@ -23,10 +23,12 @@ jobs:
           username: ${{ secrets.DOCKER_MYDOCKER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 3: Build the Docker image
-      - name: Build Docker image
-        run: docker build -t bahrami127/marketking:latest .
-
-      # Step 4: Push the Docker image to Docker Hub
-      - name: Push Docker image
-        run: docker push bahrami127/marketking:latest
+      - uses: mr-smithers-excellent/docker-build-push@v6
+        name: Build & push Docker image
+        with:
+           image: bahrami127/marketking
+           tags: v1, latest
+           registry: registry-url.io
+           dockerfile: Dockerfile.ci
+           username: ${{ secrets.DOCKER_MYDOCKER }}
+           password: ${{ secrets.DOCKER_PASSWORD }}
