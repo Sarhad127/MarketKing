@@ -24,7 +24,7 @@ repositories {
 }
 
 springBoot {
-    mainClass = 'org.sarhad.marketking.MarketKingApplication'  // Correct package and class
+    mainClass = 'org.sarhad.marketking.MarketKingApplication'
 }
 
 
